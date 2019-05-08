@@ -1,7 +1,6 @@
 `use strict`;
 
 import * as express from "express";
-import * as pty from "pty.js";
 const chalk = require("chalk");
 
 import {
