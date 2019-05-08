@@ -15,14 +15,8 @@ term.prompt = () => {
   term.write("\r\n$ ");
 };
 
-// Welcome Menu
-term.writeln("Welcome to Clutch CLI 0.0.1 for TurtleCoin.");
-term.writeln("");
-term.writeln("1) Open");
-term.writeln("2) Create");
-term.writeln("3) Import");
-term.writeln("");
-term.prompt();
+loadWelcomeMessage();
+loadWelcomeMenu();
 
 // On selection
 term.on("key", function(key, ev) {
@@ -31,7 +25,6 @@ term.on("key", function(key, ev) {
     tryMenuOption("open");
   } else if (ev.keyCode === 50) {
     // Option 2: Create
-
     tryMenuOption("create");
   } else if (ev.keyCode === 51) {
     // Option 3: Import
@@ -39,6 +32,22 @@ term.on("key", function(key, ev) {
   }
 });
 
+// Welcome Message
+function loadWelcomeMessage() {
+  term.writeln("Welcome to Clutch CLI 0.0.1 for TurtleCoin.");
+}
+
+// Welcome Menu
+function loadWelcomeMenu() {
+  term.writeln("");
+  term.writeln("1) Open");
+  term.writeln("2) Create");
+  term.writeln("3) Import");
+  term.writeln("");
+  term.prompt();
+}
+
+// Send methods to server and respond
 function tryMenuOption(action) {
   // Open the websocket connection to the backend
   const protocol = location.protocol === "https:" ? "wss://" : "ws://";
@@ -49,5 +58,9 @@ function tryMenuOption(action) {
   // Attach the socket to the terminal
   socket.onopen = ev => {
     term.attach(socket);
+  };
+
+  socket.onclose = ev => {
+    loadMenuOptions();
   };
 }
