@@ -2,6 +2,8 @@
 
 import * as express from "express";
 import * as pty from "pty.js";
+const chalk = require("chalk");
+
 import {
   WalletBackend,
   ConventionalDaemon,
@@ -31,14 +33,14 @@ expressWs.app.ws("/create", async (ws, req) => {
 
   await wallet.start();
 
-  ws.send(`\r\n Address:
-    \r\n ${address}
-    \r\n Private Spend Key:
-    \r\n ${privateSpendKey}
-    \r\n Private View Key:
-    \r\n ${privateViewKey}
-    \r\n Mnemonic Seed:
-    \r\n ${seed}
+  ws.send(`\r\n ${chalk.bold(`Address`)}
+    \r\n ${chalk.greenBright(address)}
+    \r\n ${chalk.bold(`Private Spend Key`)}
+    \r\n ${chalk.greenBright(privateSpendKey)}
+    \r\n ${chalk.bold(`Private View Key`)}
+    \r\n ${chalk.greenBright(privateViewKey)}
+    \r\n ${chalk.bold(`Mnemonic Seed`)}
+    \r\n ${chalk.greenBright(seed)}
   `);
 
   ws.close();
