@@ -13,7 +13,7 @@ import {
 const app = express();
 const socket = require("express-ws")(app);
 
-app.use(express.static(`${__dirname}/public`));
+app.use(express.static(`${__dirname}/client`));
 
 // Connect to TurtlePay Cache
 const daemon: BlockchainCacheApi = new BlockchainCacheApi(

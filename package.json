@@ -2,9 +2,9 @@
   "name": "clutch-web-wallet",
   "version": "0.0.1",
   "description": "Browser based CLI wallet for TurtleCoin.",
-  "main": "app,js",
+  "main": "server,js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon server.js",
     "test": "standard"
   },
   "repository": {
