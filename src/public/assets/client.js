@@ -10,6 +10,7 @@ term.winptyCompatInit();
 // Open Terminal
 const container = document.getElementById("terminal");
 term.open(container);
+term.fit();
 
 term.prompt = () => {
   term.write("\r\n$ ");
