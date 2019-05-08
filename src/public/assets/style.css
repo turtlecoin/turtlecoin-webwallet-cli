@@ -1,3 +1,14 @@
 body {
   background-color: black;
 }
+
+#terminal {
+  overflow: hidden;
+  width: 100%;
+  height: 100vh;
+}
+
+/* hide scroll bar */
+.xterm-viewport {
+  overflow: hidden !important;
+}
