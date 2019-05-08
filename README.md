@@ -2,7 +2,7 @@
 
 Clutch is a browser based CLI wallet for TurtleCoin utilzing xterm, socket.io and turtlecoin-wallet-backend to say the very least.
 
-![Create new Wallet]("/examples/create_wallet.gif")
+![Create new Wallet](examples/create_wallet.gif)
 
 ## Disclaimer
 
