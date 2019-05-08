@@ -11,7 +11,7 @@ import {
 } from "turtlecoin-wallet-backend";
 
 const app = express();
-const expressWs = require("express-ws")(app);
+const socket = require("express-ws")(app);
 
 app.use(express.static(`${__dirname}/public`));
 
@@ -22,7 +22,7 @@ const daemon: BlockchainCacheApi = new BlockchainCacheApi(
 );
 
 // Create wallet
-expressWs.app.ws("/create", async (ws, req) => {
+socket.app.ws("/create", async (ws, req) => {
   const wallet: WalletBackend = WalletBackend.createWallet(daemon);
   const [seed, err] = wallet.getMnemonicSeed();
   const address = wallet.getPrimaryAddress();
@@ -33,14 +33,21 @@ expressWs.app.ws("/create", async (ws, req) => {
 
   await wallet.start();
 
-  ws.send(`\r\n ${chalk.bold(`Address`)}
-    \r\n ${chalk.greenBright(address)}
-    \r\n ${chalk.bold(`Private Spend Key`)}
-    \r\n ${chalk.greenBright(privateSpendKey)}
-    \r\n ${chalk.bold(`Private View Key`)}
-    \r\n ${chalk.greenBright(privateViewKey)}
-    \r\n ${chalk.bold(`Mnemonic Seed`)}
-    \r\n ${chalk.greenBright(seed)}
+  ws.send(`\n 
+   \n ${chalk.yellowBright.bold(
+     `Welcome to your new wallet! Here is your payment address: `
+   )}
+   \n ${chalk.greenBright(address)}
+   \n
+   \n ${chalk.redBright.bold(
+     `Please record your secret keys and mnemonic seed and store them in a secure location.`
+   )}
+   \n ${chalk.bold(`Private Spend Key:`)}
+   \n ${chalk.greenBright(privateSpendKey)}
+   \n ${chalk.bold(`Private View Key:`)}
+   \n ${chalk.greenBright(privateViewKey)}
+   \n ${chalk.bold(`Mnemonic Seed:`)}
+   \n ${chalk.greenBright(seed)}
   `);
 
   ws.close();

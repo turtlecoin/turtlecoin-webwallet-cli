@@ -1,35 +1,46 @@
 // Initialize Terminal
-const term = new Terminal();
+const term = new Terminal({
+  convertEol: true,
+  cursorBlink: true,
+  cursorStyle: "block",
+  scrollback: 1000,
+  debug: true,
+  tabStopWidth: 8
+});
 
 // Apply Addons
 Terminal.applyAddon(attach);
 Terminal.applyAddon(fit);
 Terminal.applyAddon(winptyCompat);
-term.winptyCompatInit();
 
 // Open Terminal
 const container = document.getElementById("terminal");
 term.open(container);
+term.winptyCompatInit();
 term.fit();
 
+// Set Terminal Prompt
 term.prompt = () => {
-  term.write("\r\n$ ");
+  setTimeout(function() {
+    term.write("\r\n$ ");
+  }, 1000);
 };
 
-loadWelcomeMessage();
-loadWelcomeMenu();
+// Start
+welcomeMessage();
+startMenu();
 
-// On selection
+// Routes
 term.on("key", function(key, ev) {
   // Option 1: Open
   if (ev.keyCode === 49) {
-    tryMenuOption("open");
+    tryMethod("open");
   } else if (ev.keyCode === 50) {
     // Option 2: Create
-    tryMenuOption("create");
+    tryMethod("create");
   } else if (ev.keyCode === 51) {
     // Option 3: Import
-    tryMenuOption("import");
+    tryMethod("import");
   }
 
   // Write input
@@ -37,12 +48,12 @@ term.on("key", function(key, ev) {
 });
 
 // Welcome Message
-function loadWelcomeMessage() {
+function welcomeMessage() {
   term.writeln("Welcome to Clutch CLI 0.0.1 for TurtleCoin.");
 }
 
-// Welcome Menu
-function loadWelcomeMenu() {
+// Start Menu
+function startMenu() {
   term.writeln("");
   term.writeln("1) Open");
   term.writeln("2) Create");
@@ -52,19 +63,22 @@ function loadWelcomeMenu() {
 }
 
 // Send methods to server and respond
-function tryMenuOption(action) {
+function tryMethod(action) {
   // Open the websocket connection to the backend
   const protocol = location.protocol === "https:" ? "wss://" : "ws://";
   const port = location.port ? `:${location.port}` : "";
-  const socketUrl = `${protocol}${location.hostname}${port}/${action}`;
-  const socket = new WebSocket(socketUrl);
+  const url = `${protocol}${location.hostname}${port}/${action}`;
+  const socket = new WebSocket(url);
 
   // Attach the socket to the terminal
   socket.onopen = ev => {
-    term.attach(socket);
+    term.attach(socket, true, true);
   };
 
-  socket.onclose = ev => {
-    loadMenuOptions();
+  // Display Prompt after message
+  socket.onmessage = ev => {
+    term.prompt();
   };
+
+  socket.onclose = ev => {};
 }
