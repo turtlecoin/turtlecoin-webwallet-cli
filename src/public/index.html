@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Clutch CLI Wallet</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.12.2/xterm.min.css"
+      integrity="sha256-yH4D2bQ5dJfjAe//mOVCOsQxN/1PMZCgB+5UmQBYkIc="
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="./assets/style.css" />
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.12.2/xterm.min.js"
+      integrity="sha256-r5hvtWB/2oRg812Kr6tw5DKQyJK3keJ5t5tLHmaewMM="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.12.2/addons/fit/fit.min.js"
+      integrity="sha256-Vvl5QLKP5SDSGRRpXYjWYeNYZTrCgpoAX6Ug0oDAGGM="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.12.2/addons/attach/attach.min.js"
+      integrity="sha256-RPD+PklTfI0g3XsvygO3RWL9GD4lt3FiWn2pSe7DCrg="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/xterm/3.12.2/addons/winptyCompat/winptyCompat.min.js"
+      integrity="sha256-MCT++STWwl/w4LUOFqWJsWxtZ09HUopRaGBxDxSspZw="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="terminal"></div>
+    <script>
+      // Initialize Terminal
+      const term = new Terminal();
+
+      // Apply Addons
+      Terminal.applyAddon(attach);
+      Terminal.applyAddon(fit);
+      Terminal.applyAddon(winptyCompat);
+      term.winptyCompatInit();
+
+      // Open Terminal
+      const container = document.getElementById("terminal");
+      term.open(container);
+
+      term.prompt = () => {
+        term.write("\r\n$ ");
+      };
+
+      // Welcome Menu
+      term.writeln("Welcome to Clutch CLI 0.0.1 for TurtleCoin.");
+      term.writeln("");
+      term.writeln("1) Open");
+      term.writeln("2) Create");
+      term.writeln("3) Import");
+      term.writeln("");
+      term.prompt();
+
+      // On selection
+      term.on("key", function(key, ev) {
+        // Option 1: Open
+        if (ev.keyCode === 49) {
+          tryMenuOption("open");
+        } else if (ev.keyCode === 50) {
+          // Option 2: Create
+
+          tryMenuOption("create");
+        } else if (ev.keyCode === 51) {
+          // Option 3: Import
+          tryMenuOption("import");
+        }
+      });
+
+      function tryMenuOption(action) {
+        // Open the websocket connection to the backend
+        const protocol = location.protocol === "https:" ? "wss://" : "ws://";
+        const port = location.port ? `:${location.port}` : "";
+        const socketUrl = `${protocol}${location.hostname}${port}/${action}`;
+        const socket = new WebSocket(socketUrl);
+
+        // Attach the socket to the terminal
+        socket.onopen = ev => {
+          term.attach(socket);
+        };
+      }
+    </script>
+  </body>
+</html>
