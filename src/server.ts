@@ -1,7 +1,6 @@
 `use strict`;
 
 import * as express from "express";
-const chalk = require("chalk");
 
 import {
   WalletBackend,
@@ -9,6 +8,9 @@ import {
   BlockchainCacheApi
 } from "turtlecoin-wallet-backend";
 
+const chalk = require("chalk");
+
+// Setup
 const app = express();
 const socket = require("express-ws")(app);
 
@@ -55,5 +57,5 @@ socket.app.ws("/create", async (ws, req) => {
   wallet.stop();
 });
 
-// Start the server
+// Start Server
 app.listen(3000);
