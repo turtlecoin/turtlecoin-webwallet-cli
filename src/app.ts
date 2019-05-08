@@ -19,9 +19,11 @@ const daemon: BlockchainCacheApi = new BlockchainCacheApi(
   true
 );
 
-// Open wallet
+// Create wallet
 expressWs.app.ws("/create", async (ws, req) => {
   const wallet: WalletBackend = WalletBackend.createWallet(daemon);
+
+  await wallet.start();
 
   ws.send("\r\n");
 
