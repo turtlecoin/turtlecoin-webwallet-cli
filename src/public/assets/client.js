@@ -25,12 +25,14 @@ term.on("key", function(key, ev) {
     tryMenuOption("open");
   } else if (ev.keyCode === 50) {
     // Option 2: Create
-
     tryMenuOption("create");
   } else if (ev.keyCode === 51) {
     // Option 3: Import
     tryMenuOption("import");
   }
+
+  // Write input
+  term.write(key);
 });
 
 // Welcome Message
