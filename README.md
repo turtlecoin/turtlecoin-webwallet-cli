@@ -8,7 +8,7 @@ Clutch is a browser based CLI wallet for TurtleCoin utilzing [xterm.js](https://
 
 This project is still in its early stages, with little to no functionality.
 
-Currently commands are passed to server-side for processing, and thus wallets are stored and processed in a centralized manner. This could be useful for services that wish to integrate wallet utilities in their tools and apps. The ultimate goal, when possible (still work to be done on turtlecoin-wallet-backend) is to have a client-side only version available too.
+Currently commands are passed to server-side for processing, and thus wallets are stored and processed in a centralized manner. This can be useful for services that wish to integrate a wallet CLI in their tools and apps. The goal is to have a client-side only version too, however, currently this is not fully supported yet by [turtlecoin-wallet-backend-js](https://github.com/turtlecoin/turtlecoin-wallet-backend-js).
 
 ## Getting Started
 
